@@ -1,4 +1,4 @@
-(in-package :app)
+(in-package :map.widget)
 
 (defclass* hackathon (tagged-item-mixin)
   ((location nil :documentation "Location of hackathon")
