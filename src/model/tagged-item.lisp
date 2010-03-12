@@ -1,10 +1,10 @@
-(in-package :app)
+ (in-package :map.widget)
 
 ;; A mixin that stores tags as keywords
 
 (defparameter *all-tags* (make-hash-table))
 
-(defun add-tag (tag)
+(defun inc-tag (tag)
   (sif (gethash tag *all-tags*)
        (incf it)
        (setf it 1)))
@@ -17,7 +17,7 @@
 (defun any->keyword (tag)
   )
 
-(defclass* tagged-item-mixin ()
+(defclass-star::defclass* tagged-item-mixin ()
   ((tagged-with :initform (make-hash-table))))
 
 (defmethod has-tag ((tim tagged-item-mixin) tag))

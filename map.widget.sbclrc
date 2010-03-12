@@ -1,0 +1,40 @@
+(require 'asdf)
+(require 'sb-posix)
+(require :sb-aclrepl)
+
+(defvar *project-root* (pathname (nth 1 *posix-argv*)))
+(defvar *port* (parse-integer (nth 2 *posix-argv*)))
+(defvar *swank-port* (parse-integer (nth 3 *posix-argv*)))
+(defvar *project-lib-systems* (merge-pathnames #p"lib/systems/" *project-root*))
+
+(push *project-root* asdf:*central-registry*)
+(push *project-lib-systems* asdf:*central-registry*)
+
+#+nomore(if (member "--no-linedit" sb-ext:*posix-argv* :test 'equal)
+    (setf sb-ext:*posix-argv* (remove "--no-linedit" sb-ext:*posix-argv* :test 'equal))
+    (when (interactive-stream-p *terminal-io*)
+      (require :sb-aclrepl)
+      (require :linedit)
+      (funcall (intern "INSTALL-REPL" :linedit) :wrap-current t)))
+
+(asdf:operate 'asdf:load-op 'weblocks)
+
+(asdf:oos 'asdf:load-op 'swank)
+(swank:create-server :dont-close t :port *swank-port*)
+
+(asdf:oos 'asdf:load-op 'map.widget)
+(map.widget:start-map.widget :port *port*)
+
+;; sending "\033[2J" to clear screen
+;; (format t "~C[2J~%" #\Esc)
+
+(format t "Welcome to weblocks~%")
+(format t "Weblocks is running on port ~S, and can be access by browsing http://localhost:~S~%" *port* *port*)
+(format t "Swank is running on port ~S~%" *swank-port*)
+;; ;; (format t "Use (quit) to exit REPL")
+(in-package map.widget)
+
+(defmacro loadsys (sys)
+  `(asdf:oos 'asdf:load-op (quote ,sys)))
+
+(defun quit () (sb-ext:quit))
