@@ -33,9 +33,12 @@ important parts've all been chucked into misc:
 Misc dir:
 ---------------------------
 file:   geochecker.lisp       (contains a claims-geochecker widget)
+
 file:   maps.js
+
 file:   older-geochecker.lisp (older-geochecker shows a previous, failed 
 approach)
+
 
 maps.js is loaded as a dependency of the geochecker widget which is called 
 claims-geochecker and is defined in geochecker.lisp
@@ -51,6 +54,11 @@ place-names that geonames returns (eg Place, Country etc)
 
 I also investigated cl-geonames, but it was more user-friendly to build 
 the UI in JS, and so ended up using the ajax option for the query.
+
+Dependencies
+-----------------
+
+Dialogs, and on-change events etc. are monitored thru YUI, the accordion library used is also based on YUI.
 
 Download & Installation 
 -----------------------
